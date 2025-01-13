@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Chatbot</title>
+  <style>
+    /* Styling the chatbot interface */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #40006d, #a7053b);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 400px;
+      background: #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    h1 {
+      background: #1e0033;
+      color: #fff;
+      margin: 0;
+      padding: 10px;
+      text-align: center;
+    }
+
+    #chat-box {
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .input-container {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    button {
+      background: #1e0033;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #370057;
+    }
+
+    .message {
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 5px;
+    }
+
+    .user-message {
+      background: #daf1da;
+      text-align: right;
+    }
+
+    .bot-message {
+      background: #e0e0e0;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <h1>Interactive Chatbot</h1>
+    <div id="chat-box"></div>
+    <div class="input-container">
+      <input type="text" id="user-input" placeholder="Ask something...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+
+  const chatBox = document.getElementById("chat-box");
+  const userInput = document.getElementById("user-input");
+
+  // Function to display messages
+  function displayMessage(message, sender) {
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `message ${sender === "user" ? "user-message" : "bot-message"}`;
+    msgDiv.textContent = message;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  // Function to send messages
+  async function sendMessage() {
+    const userMessage = userInput.value.trim();
+    if (!userMessage) return;
+
+    // Display user message
+    displayMessage(userMessage, "user");
+    userInput.value = "";
+
+    try {
+      // Send message to the backend
+      const response = await fetch("http://localhost:3000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userMessage }),
+      });
+
+      const data = await response.json();
+      const botReply = data.reply || "Sorry, I couldn't understand that.";
+      displayMessage(botReply, "bot");
+    } catch (error) {
+      console.error("Error:", error);
+      displayMessage("Error fetching response. Please try again later.", "bot");
+    }
+  }
+
+  // Send message on pressing Enter
+  userInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+
+  </script>
+</body>
+</html>
