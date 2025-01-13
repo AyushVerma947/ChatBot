@@ -1,6 +1,6 @@
 # ChatBot
 
-ChatBot is a simple application featuring a chatbot interface and a Node.js backend that serves as a proxy for handling API requests. The app allows users to send messages and receive responses in real-time. From this repository you can learn how to make a Basic chatbot along with its backend to prevent CORS Issues. Before staring make sure you have your api key with you.
+ChatBot is a simple application featuring a chatbot interface and a Node.js backend that serves as a proxy for handling API requests. The app allows users to send messages and receive responses in real-time. From this repository you can learn how to make a Basic chatbot along with its backend to prevent CORS Issues. Before starting make sure you have your api key with you.
 
 ## File Structure
 
